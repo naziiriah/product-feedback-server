@@ -1,10 +1,15 @@
 const aysncHandler = require('express-async-handler')
 
+const Feedback = require('../model/feedbackModel')
+
+
 // @desc  Get current Feedback
 // @route GET /api/feedback
 // @access Private 
 const viewFeedbacks = aysncHandler(async (req, res) => {
-    res.status(200).json({message: "Get Goals"})
+    const feedbacks = await Feedback.find()
+    
+    res.status(200).json(feedbacks)
 })
 
 
@@ -18,7 +23,12 @@ const addFeedbacks = aysncHandler(async (req, res) => {
         res.status(400)
         throw new Error('"Please add title, categories and description "')
     }
-    res.status(200).json({Message: "Add feedbacks to products"})
+
+    const feedback = await Feedback.create({
+        text: req.body.text
+    })
+
+    res.status(200).json(feedback)
 })
 
 
@@ -28,7 +38,18 @@ const addFeedbacks = aysncHandler(async (req, res) => {
 // @route GET /api/feedback
 // @access Private 
 const updateVote = aysncHandler( async (req, res ) => {
-    res.status(200).json({Status: true})
+    const feedback = await Feedback.findById(req.params.id)
+
+    if(!feedback){
+        res.status(400)
+        throw new Error('Feedback not foound')
+    }
+
+    const updatedFeeds = await Feedback.findByIdAndUpdate(req.params.id, req.body, {
+        new:true,
+    })
+
+    res.status(200).json(updatedFeeds)
 })
 
 
@@ -36,6 +57,16 @@ const updateVote = aysncHandler( async (req, res ) => {
 // @route GET /api/feedback
 // @access Private 
 const deleteFeedback = aysncHandler(async (req, res) => {
+    const feedback = await Feedback.findById(req.params.id)
+
+    if(!feedback){
+        res.status(400)
+        throw new Error('Feedback not foound')
+    }
+
+    await feedback.remove()
+
+
     res.status(200).json({message: `Delete Feedback id ${req.params.id}`})
 })
 
