@@ -7,10 +7,11 @@ const {
     deleteFeedback 
 } = require('../controllers/feedbackController')
 
-router.get('/', viewFeedbacks).post('/', addFeedbacks)
+const { protected } = require('../middleware/authMiddleware')
 
+router.route('/').get(protected, viewFeedbacks).post(protected,addFeedbacks)
 
-router.put('/:id', updateVote).delete('/:id', deleteFeedback)
+router.route('/:id').put(protected, updateVote).delete(protected, deleteFeedback)
 
 
 

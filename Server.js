@@ -14,6 +14,7 @@ app.use(urlencoded({extended:false}))
 
 
 app.use('/api/feedback', require('./routes/feedbackRoutes'))
+app.use('/api/user', require('./routes/userRoutes'))
 
 app.use(errorHandler)
 
