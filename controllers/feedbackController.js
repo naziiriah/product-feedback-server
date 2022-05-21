@@ -1,6 +1,4 @@
 const aysncHandler = require('express-async-handler')
-const { globalAgent } = require('http')
-
 const Feedback = require('../model/feedbackModel')
 const User = require('../model/userModel')
 
